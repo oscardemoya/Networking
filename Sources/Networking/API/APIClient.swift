@@ -23,7 +23,7 @@ public actor APIClient: Client {
         self.delegate = delegate
     }
     
-    func send<Response: Decodable>(request: Request<Response>) async throws -> Response {
+    public func send<Response: Decodable>(request: Request<Response>) async throws -> Response {
         let urlRequest = URLRequest(api: api, request: request)
         let (data, response) = try await session.data(for: urlRequest, delegate: delegate)
         if let string = String(data: data, encoding: .utf8) {
