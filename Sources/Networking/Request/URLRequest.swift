@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension URLRequest {
+public extension URLRequest {
     init<Response: Decodable>(api: any API, request: Request<Response>) {
         let url = api.url(appending: request.path)
         var urlRequest = URLRequest(url: url)

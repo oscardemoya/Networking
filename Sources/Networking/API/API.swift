@@ -8,8 +8,6 @@
 import Foundation
 
 public protocol API {
-    associatedtype Environment
-    var environment: Environment { get }
     var baseURL: URL { get }
 }
 
