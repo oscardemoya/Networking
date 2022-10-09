@@ -10,6 +10,12 @@ import XCTest
 
 final class APIClientTests: XCTestCase {
     
+    func testAPIClient_init_withBaseURL() async {
+        let client = APIClient(baseURL: "http://example.com")
+        let baseURL = await client.api.baseURL
+        XCTAssertEqual(baseURL, "http://example.com")
+    }
+    
     func testAPIClient_get_shouldSendGETHTTPMethod() async throws {
     }
     

@@ -12,9 +12,9 @@ protocol Client {
 }
 
 public actor APIClient: Client {
-    private let api: any API
-    private let session: URLSession
-    private let delegate: URLSessionTaskDelegate?
+    let api: any API
+    let session: URLSession
+    let delegate: URLSessionTaskDelegate?
     
     public init(api: any API, session: URLSessionConfiguration = .default, delegate: URLSessionTaskDelegate? = nil) {
         self.api = api
@@ -30,10 +30,6 @@ public actor APIClient: Client {
     public func send<T: Decodable>(request: Request<Response<T>>) async throws -> Response<T> {
         let urlRequest = URLRequest(api: api, request: request)
         let (data, response) = try await session.data(for: urlRequest, delegate: delegate)
-        if let string = String(data: data, encoding: .utf8) {
-            print(urlRequest.url?.absoluteString ?? "")
-            print(string)
-        }
         try validate(response: response, data: data)
         let value: T = try await decode(data)
         return Response<T>(request: request, data: data, response: response, value: value)
