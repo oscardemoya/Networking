@@ -22,6 +22,11 @@ public actor APIClient: Client {
         self.delegate = delegate
     }
     
+    public init(baseURL: URL, session: URLSessionConfiguration = .default, delegate: URLSessionTaskDelegate? = nil) {
+        let api = DefaultAPI(baseURL: baseURL)
+        self.init(api: api, session: session, delegate: delegate)
+    }
+    
     public func send<T: Decodable>(request: Request<Response<T>>) async throws -> Response<T> {
         let urlRequest = URLRequest(api: api, request: request)
         let (data, response) = try await session.data(for: urlRequest, delegate: delegate)

@@ -17,6 +17,14 @@ public extension API {
     }    
 }
 
+struct DefaultAPI: API {
+    var baseURL: URL
+    
+    init(baseURL: URL) {
+        self.baseURL = baseURL
+    }
+}
+
 enum ResponseError: Error {
     case unacceptable(statusCode: Int)
     case dataEncodingError
