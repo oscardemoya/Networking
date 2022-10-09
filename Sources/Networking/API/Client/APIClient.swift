@@ -8,11 +8,10 @@
 import Foundation
 
 protocol Client {
-    func send<Response: Decodable>(request: Request<Response>) async throws -> Response
+    func send<T: Decodable>(request: Request<Response<T>>) async throws -> Response<T>
 }
 
 public actor APIClient: Client {
-    typealias Response = Decodable
     private let api: any API
     private let session: URLSession
     private let delegate: URLSessionTaskDelegate?
@@ -23,7 +22,7 @@ public actor APIClient: Client {
         self.delegate = delegate
     }
     
-    public func send<Response: Decodable>(request: Request<Response>) async throws -> Response {
+    public func send<T: Decodable>(request: Request<Response<T>>) async throws -> Response<T> {
         let urlRequest = URLRequest(api: api, request: request)
         let (data, response) = try await session.data(for: urlRequest, delegate: delegate)
         if let string = String(data: data, encoding: .utf8) {
@@ -31,7 +30,8 @@ public actor APIClient: Client {
             print(string)
         }
         try validate(response: response, data: data)
-        return try await decode(data)
+        let value: T = try await decode(data)
+        return Response<T>(request: request, data: data, response: response, value: value)
     }
     
     func validate(response: URLResponse, data: Data) throws {

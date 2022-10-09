@@ -27,7 +27,7 @@ final class APITests: XCTestCase {
         let api = APIMock.stub()
         let path = "/search/posts"
         let queryItems = [URLQueryItem(name: "q", value: "test")]
-        let request = Request<ResponseMock>.stub(path: path, queryItems: queryItems)
+        let request = Request<Response<ResponseMock>>.stub(path: path, queryItems: queryItems)
         
         // when
         let urlRequest = URLRequest(api: api, request: request)

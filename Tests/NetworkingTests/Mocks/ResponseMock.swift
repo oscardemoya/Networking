@@ -10,9 +10,8 @@
 struct ResponseMock: Decodable {
 }
 
-struct Post: Decodable {
+struct EntityMock: Decodable {
     var id: Int
-    var userId: Int
     var title: String
     var body: String
 }
