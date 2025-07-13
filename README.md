@@ -1,6 +1,6 @@
 # Networking
 
-Basic Networking Layer for Clean Architecture and MVVM Template Project.
+Basic Networking Layer for my [Clean Architecture](https://github.com/oscardemoya/CleanApp) template project.
 
 Inspired by:
 - [kean/Get](https://github.com/kean/Get)
