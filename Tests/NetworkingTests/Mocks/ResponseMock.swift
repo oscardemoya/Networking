@@ -1,6 +1,6 @@
 //
 //  ResponseMock.swift
-//  
+//  NetworkingTests
 //
 //  Created by Oscar De Moya on 8/10/22.
 //

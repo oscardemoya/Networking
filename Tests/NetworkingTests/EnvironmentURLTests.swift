@@ -1,23 +1,19 @@
 //
 //  EnvironmentURLTests.swift
-//  
+//  NetworkingTests
 //
 //  Created by Oscar De Moya on 7/10/22.
 //
 
-import XCTest
+import Testing
 @testable import Networking
 
-final class EnvironmentURLTests: XCTestCase {
-    
-    func testRouter_productionBaseURL() throws {
-        let router = APIMock.stub(environment: .production)
-        XCTAssertEqual(router.baseURL, "https://example.com")
-    }
-    
-    func testRouter_developmentBaseURL() throws {
-        let router = APIMock.stub(environment: .development)
-        XCTAssertEqual(router.baseURL, "https://dev.example.com")
-    }
-    
+@Test func testRouter_productionBaseURL() async {
+    let router = APIMock.stub(environment: .production)
+    #expect(router.baseURL == "https://example.com")
+}
+
+@Test func testRouter_developmentBaseURL() throws {
+    let router = APIMock.stub(environment: .development)
+    #expect(router.baseURL == "https://dev.example.com")
 }

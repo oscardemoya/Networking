@@ -15,6 +15,15 @@ public extension URLRequest {
         if let queryItems = request.queryItems {
             urlRequest.url?.append(queryItems: queryItems)
         }
+        if let body = request.body {
+            urlRequest.httpBody = body
+        }
+        request.headers?.forEach { (header, value) in
+            urlRequest.setValue(value, forHTTPHeaderField: header)
+        }
+        if urlRequest.value(forHTTPHeaderField: HTTPHeaderField.contentType.rawValue) == nil {
+            urlRequest.setValue(ContentType.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
+        }
         self = urlRequest
     }
 }

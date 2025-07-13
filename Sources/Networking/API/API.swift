@@ -25,7 +25,8 @@ struct DefaultAPI: API {
     }
 }
 
-enum ResponseError: Error {
+public enum ResponseError: Error {
+    case invalidResponse
     case unacceptable(statusCode: Int)
     case dataEncodingError
     case decodingError

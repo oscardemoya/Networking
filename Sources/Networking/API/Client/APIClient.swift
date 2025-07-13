@@ -29,13 +29,15 @@ public actor APIClient: Client {
     
     public func send<T: Decodable>(request: Request<Response<T>>) async throws -> Response<T> {
         let urlRequest = URLRequest(api: api, request: request)
+        urlRequest.log()
         let (data, response) = try await session.data(for: urlRequest, delegate: delegate)
-        try validate(response: response, data: data)
+        response.log(data, from: urlRequest)
+        try validate(data, and: response)
         let value: T = try await decode(data)
         return Response<T>(request: request, data: data, response: response, value: value)
     }
     
-    func validate(response: URLResponse, data: Data) throws {
+    func validate(_ data: Data, and response: URLResponse) throws {
         guard let httpResponse = response as? HTTPURLResponse else { return }
         guard (200..<300) ~= httpResponse.statusCode else {
             throw ResponseError.unacceptable(statusCode: httpResponse.statusCode)
@@ -49,9 +51,25 @@ public actor APIClient: Client {
             }
             return value
         }
-        return try await Task.detached {
-            let decoder = JSONDecoder()
+        let decoder = JSONDecoder()
+        // TODO: Move this to a configuration (make decoder a parameter of APIClient and set those in APIClientFactory)
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        decoder.dateDecodingStrategy = .formatted(formatter)
+        do {
             return try decoder.decode(T.self, from: data)
-        }.value
+        } catch {
+            if let error = error as? DecodingError {
+                logger.error("Decoding Error [\(String(describing: T.self))]:")
+                error.log()
+                throw ResponseError.decodingError
+            } else {
+                logger.error("\(error)")
+                throw error
+            }
+        }
     }
 }

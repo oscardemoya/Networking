@@ -1,22 +1,15 @@
 //
 //  APIClientTests.swift
-//  
+//  NetworkingTests
 //
 //  Created by Oscar De Moya on 9/10/22.
 //
 
-import XCTest
+import Testing
 @testable import Networking
 
-final class APIClientTests: XCTestCase {
-    
-    func testAPIClient_init_withBaseURL() async {
-        let client = APIClient(baseURL: "http://example.com")
-        let baseURL = await client.api.baseURL
-        XCTAssertEqual(baseURL, "http://example.com")
-    }
-    
-    func testAPIClient_get_shouldSendGETHTTPMethod() async throws {
-    }
-    
+@Test func testAPIClient_init_withBaseURL() async {
+    let client = APIClient(baseURL: "http://example.com")
+    let baseURL = await client.api.baseURL
+    #expect(baseURL == "http://example.com")
 }

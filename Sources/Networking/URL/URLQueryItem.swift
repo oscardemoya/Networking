@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Array<URLQueryItem>: ExpressibleByDictionaryLiteral {
+extension Array<URLQueryItem>: @retroactive ExpressibleByDictionaryLiteral {
     public init(dictionaryLiteral elements: (String, String?)...) {
         self = elements.map { URLQueryItem(name: $0.0, value: $0.1) }
     }
