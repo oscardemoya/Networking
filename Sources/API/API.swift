@@ -19,10 +19,6 @@ public extension API {
 
 struct DefaultAPI: API {
     var baseURL: URL
-    
-    init(baseURL: URL) {
-        self.baseURL = baseURL
-    }
 }
 
 public enum ResponseError: Error {

@@ -14,17 +14,21 @@ protocol Client {
 public actor APIClient: Client {
     let api: any API
     let session: URLSession
+    let decoder: JSONDecoder
     let delegate: URLSessionTaskDelegate?
     
-    public init(api: any API, session: URLSessionConfiguration = .default, delegate: URLSessionTaskDelegate? = nil) {
+    public init(api: any API, session: URLSessionConfiguration = .default, decoder: JSONDecoder = .init(),
+                delegate: URLSessionTaskDelegate? = nil) {
         self.api = api
         self.session = URLSession(configuration: session)
+        self.decoder = decoder
         self.delegate = delegate
     }
     
-    public init(baseURL: URL, session: URLSessionConfiguration = .default, delegate: URLSessionTaskDelegate? = nil) {
+    public init(baseURL: URL, session: URLSessionConfiguration = .default, decoder: JSONDecoder = .init(),
+                delegate: URLSessionTaskDelegate? = nil) {
         let api = DefaultAPI(baseURL: baseURL)
-        self.init(api: api, session: session, delegate: delegate)
+        self.init(api: api, session: session, decoder: decoder, delegate: delegate)
     }
     
     public func send<T: Decodable>(request: Request<Response<T>>) async throws -> Response<T> {
@@ -51,14 +55,6 @@ public actor APIClient: Client {
             }
             return value
         }
-        let decoder = JSONDecoder()
-        // TODO: Move this to a configuration (make decoder a parameter of APIClient and set those in APIClientFactory)
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        decoder.dateDecodingStrategy = .formatted(formatter)
         do {
             return try decoder.decode(T.self, from: data)
         } catch {

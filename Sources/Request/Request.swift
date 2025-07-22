@@ -14,8 +14,13 @@ public struct Request<Response> {
     var body: Data?
     var headers: [String: String]?
     
-    public init(method: HTTPMethod = .get, path: String, queryItems: [URLQueryItem]? = nil, body: Data? = nil,
-         headers: [String : String]? = nil) {
+    public init(
+        method: HTTPMethod = .get,
+        path: String,
+        queryItems: [URLQueryItem]? = nil,
+        body: Data? = nil,
+        headers: [String: String]? = nil
+    ) {
         self.method = method
         self.path = path
         self.queryItems = queryItems

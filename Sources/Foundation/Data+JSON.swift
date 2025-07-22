@@ -15,7 +15,7 @@ public extension Data {
     }
     
     var jsonObject: [String: Any] {
-        guard let json = try? JSONSerialization.jsonObject(with: self, options: []) as? [String : Any] else {
+        guard let json = try? JSONSerialization.jsonObject(with: self, options: []) as? [String: Any] else {
             return [:]
         }
         return json

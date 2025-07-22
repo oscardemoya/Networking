@@ -25,7 +25,7 @@ public extension APIClient {
     
     /// Sends a PUT HTTP request
     func put<T: Decodable>(_ path: String, queryItems: [URLQueryItem]? = nil, body: Data? = nil,
-                            headers: [String: String]? = nil) async throws -> Response<T> {
+                           headers: [String: String]? = nil) async throws -> Response<T> {
         return try await request(method: .put, path: path, queryItems: queryItems, body: body, headers: headers)
     }
     
